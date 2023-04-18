@@ -1,4 +1,4 @@
-<header style="box-shadow: 0 1em 0.2em #33333333;">
+<header>
 	<a href="/"
 		><img class="logo" src="/images/icons/logos/Logo3.png" alt="The Vegetarian Cowgirl" /></a
 	>
@@ -27,6 +27,8 @@
 <style lang="scss">
 	header {
 		position: sticky;
+		top: 0;
+		background-color: white;
 		padding: 0 4rem 0.5rem;
 		display: flex;
 		justify-content: space-around;
@@ -38,7 +40,7 @@
 	}
 
 	.logo {
-		height: 3.5rem;
+		height: 3.75rem;
 		padding: 0.375rem 0.5rem 1.25rem;
 	}
 
@@ -51,8 +53,9 @@
 		a {
 			--hover-orange: #ea9782;
 			--anim-time: 0.6s;
-			padding: 0.5rem;
+			padding: 0.5rem 0;
 			text-decoration: none;
+			text-transform: uppercase;
 			border: 0.25rem solid transparent;
 			color: black;
 			transition: color var(--anim-time) ease, border-bottom-color var(--anim-time) ease,
@@ -70,8 +73,13 @@
 		a {
 			margin: 0 0.15rem;
 		}
+
 		img {
 			height: 1rem;
+
+			&:hover {
+				transform: scale(1.1);
+			}
 		}
 	}
 </style>
