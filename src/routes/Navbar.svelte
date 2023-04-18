@@ -1,3 +1,7 @@
+<script>
+	import SocialNav from './SocialNav.svelte';
+</script>
+
 <header>
 	<a href="/"
 		><img class="logo" src="/images/icons/logos/Logo3.png" alt="The Vegetarian Cowgirl" /></a
@@ -11,17 +15,7 @@
 		<a href="/about">About</a>
 	</nav>
 
-	<nav class="social">
-		<a href="https://instagram.com/thevegetariancowgirl/"
-			><img src="/images/icons/instagram.png" alt="Instagram" /></a
-		>
-		<a href="https://etsy.com/shop/PrintsbyMinimalist"
-			><img src="/images/icons/etsy.png" alt="Etsy" /></a
-		>
-		<a href="https://pinterest.com/PrintsbyMinimalist/"
-			><img src="/images/icons/pinterest.png" alt="Pinterest" /></a
-		>
-	</nav>
+	<SocialNav />
 </header>
 
 <style lang="scss">
@@ -56,6 +50,7 @@
 			padding: 0.5rem 0;
 			text-decoration: none;
 			text-transform: uppercase;
+			font-size: small;
 			border: 0.25rem solid transparent;
 			color: black;
 			transition: color var(--anim-time) ease, border-bottom-color var(--anim-time) ease,
@@ -65,20 +60,6 @@
 				border-bottom-color: var(--hover-orange);
 				color: var(--hover-orange);
 				transform: translateY(0.05rem);
-			}
-		}
-	}
-
-	.social {
-		a {
-			margin: 0 0.15rem;
-		}
-
-		img {
-			height: 1rem;
-
-			&:hover {
-				transform: scale(1.1);
 			}
 		}
 	}
