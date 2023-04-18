@@ -27,6 +27,7 @@
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
+		z-index: 1;
 
 		> * {
 			display: inline-block;
