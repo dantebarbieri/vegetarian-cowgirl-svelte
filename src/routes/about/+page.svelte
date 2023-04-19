@@ -1,4 +1,5 @@
 <script>
+	import { base } from '$app/paths';
 	import Header from '../Header.svelte';
 </script>
 
@@ -6,7 +7,7 @@
 	<title>About | The Vegetarian Cowgirl</title>
 </svelte:head>
 
-<img src="/images/about/rainbow.jpg" alt="Anjali under a rainbow" />
+<img src="{base}/images/about/rainbow.jpg" alt="Anjali under a rainbow" />
 
 <div class="center">
 	<Header id="meet-anjali" variant="h2">Meet Anjali</Header>

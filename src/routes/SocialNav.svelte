@@ -1,12 +1,16 @@
+<script lang="ts">
+	import { base } from '$app/paths';
+</script>
+
 <nav class="social">
 	<a href="https://instagram.com/thevegetariancowgirl/"
-		><img src="/images/icons/instagram.png" alt="Instagram" /></a
+		><img src="{base}/images/icons/instagram.png" alt="Instagram" /></a
 	>
 	<a href="https://etsy.com/shop/PrintsbyMinimalist"
-		><img src="/images/icons/etsy.png" alt="Etsy" /></a
+		><img src="{base}/images/icons/etsy.png" alt="Etsy" /></a
 	>
 	<a href="https://pinterest.com/PrintsbyMinimalist/"
-		><img src="/images/icons/pinterest.png" alt="Pinterest" /></a
+		><img src="{base}/images/icons/pinterest.png" alt="Pinterest" /></a
 	>
 </nav>
 
