@@ -9,7 +9,7 @@
 
 <img src="{base}/images/about/rainbow.jpg" alt="Anjali under a rainbow" />
 
-<div class="center">
+<article class="center">
 	<Header id="meet-anjali" variant="h2">Meet Anjali</Header>
 
 	<p>
@@ -24,7 +24,9 @@
 		around the globe through her travels. What started as a personal tool to share with her family
 		and friends has become much more for all to explore.
 	</p>
+</article>
 
+<article class="center">
 	<Header id="about-blog" variant="h2">About the Blog</Header>
 
 	<p>
@@ -34,10 +36,12 @@
 		out the travel itineraries that she has created. The goal of the blog is to celebrate
 		plant-based eating internationally.
 	</p>
+</article>
 
+<article class="center">
 	<h2 id="instagram">Follow On Instagram</h2>
 	<a href="https://instagram.com/thevegetariancowgirl/"><h2>@thevegetariancowgirl</h2></a>
-</div>
+</article>
 
 <style lang="scss">
 	img {
@@ -54,7 +58,7 @@
 	p {
 		font-size: larger;
 		font-weight: lighter;
-		width: 67%;
+		width: 85%;
 		color: #000000b3;
 	}
 
@@ -70,6 +74,12 @@
 			color: #ea9782;
 			margin-top: 0;
 			margin-bottom: 1.5rem;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		p {
+			width: 100%;
 		}
 	}
 </style>

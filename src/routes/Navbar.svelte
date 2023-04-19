@@ -84,13 +84,12 @@
 	}
 
 	@media (max-width: 950px) {
-		.logo-link,
 		.social {
 			display: none;
 		}
 
 		header {
-			justify-content: center;
+			flex-direction: column;
 		}
 	}
 

@@ -26,4 +26,10 @@
 		padding: 1rem;
 		margin: 0 6rem;
 	}
+
+	@media (max-width: 1000px) {
+		main {
+			margin: 0 1rem;
+		}
+	}
 </style>

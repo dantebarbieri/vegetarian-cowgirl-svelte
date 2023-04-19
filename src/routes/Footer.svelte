@@ -14,7 +14,7 @@
 		<SocialNav />
 	</section>
 
-	<div class="divider" />
+	<div class="divider" aria-hidden="true" />
 
 	<section class="travel">
 		<a class="category" href="{base}/travel"><h2>Travel</h2></a>
@@ -187,6 +187,10 @@
 			height: 1px;
 			border-left: none;
 			border-top: 1px solid currentColor;
+		}
+
+		.copyright {
+			text-align: center;
 		}
 	}
 </style>
