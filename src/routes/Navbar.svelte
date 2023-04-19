@@ -4,7 +4,7 @@
 </script>
 
 <header>
-	<a href="{base}/"
+	<a class="logo-link" href="{base}/"
 		><img class="logo" src="{base}/images/icons/logos/Logo3.png" alt="The Vegetarian Cowgirl" /></a
 	>
 
@@ -17,7 +17,9 @@
 			<a href="{base}/about">About</a>
 		</nav>
 
-		<SocialNav />
+		<div class="social">
+			<SocialNav />
+		</div>
 	</section>
 </header>
 
@@ -58,7 +60,6 @@
 		a {
 			--hover-orange: #ea9782;
 			--anim-time: 0.6s;
-			padding: 0.5rem 0;
 			text-decoration: none;
 			text-transform: uppercase;
 			font-size: small;
@@ -72,6 +73,33 @@
 				border-bottom-color: var(--hover-orange);
 				color: var(--hover-orange);
 				transform: translateY(0.075rem);
+			}
+		}
+	}
+
+	@media (max-width: 1025px) {
+		.pages {
+			gap: 1rem;
+		}
+	}
+
+	@media (max-width: 950px) {
+		.logo-link,
+		.social {
+			display: none;
+		}
+
+		header {
+			justify-content: center;
+		}
+	}
+
+	@media (max-width: 575px) {
+		.pages {
+			gap: 0rem;
+
+			a {
+				padding: 0.25rem 0.5rem;
 			}
 		}
 	}
