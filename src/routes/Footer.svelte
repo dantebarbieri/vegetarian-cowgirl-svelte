@@ -127,33 +127,6 @@
 		}
 	}
 
-	.row {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: flex-start;
-	}
-
-	.column {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-start;
-
-		p {
-			text-align: center;
-		}
-
-		.row &:nth-child(1) {
-			padding-right: 1.5rem;
-		}
-
-		.row &:nth-child(2) {
-			border-left: 1px solid currentColor;
-		}
-	}
-
 	.logo {
 		height: 5rem;
 	}
@@ -164,7 +137,7 @@
 		font-weight: lighter;
 	}
 
-	@media (max-width: 500px) {
+	@media (max-width: 750px) {
 		footer {
 			grid-template-columns: repeat(2, 1fr);
 			grid-template-areas:
