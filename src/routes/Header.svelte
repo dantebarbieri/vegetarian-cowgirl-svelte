@@ -3,46 +3,47 @@
 	export let underline_width: string = '3rem';
 	export let underline_thickness: string = '0.22rem';
 	export let underline_gap: string = '0.75rem';
+	export let font_size: string = 'revert';
 </script>
 
 {#if variant === 'h1'}
 	<h1
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />
 	</h1>
 {:else if variant === 'h2'}
 	<h2
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />
 	</h2>
 {:else if variant === 'h3'}
 	<h3
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />
 	</h3>
 {:else if variant === 'h4'}
 	<h4
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />
 	</h4>
 {:else if variant === 'h5'}
 	<h5
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />
 	</h5>
 {:else if variant === 'h6'}
 	<h6
-		style="--underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
+		style="font-size: {font_size}; --underline-width: {underline_width}; --underline-thickness: {underline_thickness}; --underline-gap: {underline_gap};"
 		{...$$props}
 	>
 		<slot />

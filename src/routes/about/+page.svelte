@@ -7,10 +7,12 @@
 	<title>About | The Vegetarian Cowgirl</title>
 </svelte:head>
 
-<img src="{base}/images/about/rainbow.jpg" alt="Anjali under a rainbow" />
+<div class="hero">
+	<img src="{base}/images/about/rainbow.jpg" alt="Anjali under a rainbow" />
+</div>
 
 <article class="center">
-	<Header id="meet-anjali" variant="h2">Meet Anjali</Header>
+	<Header id="meet-anjali" variant="h2" font_size="xx-large">Meet Anjali</Header>
 
 	<p>
 		Anjali Segu is an Austin Lifestyle blogger behind The Vegetarian Cowgirl, Austin's top
@@ -27,7 +29,7 @@
 </article>
 
 <article class="center">
-	<Header id="about-blog" variant="h2">About the Blog</Header>
+	<Header id="about-blog" variant="h2" font_size="xx-large">About the Blog</Header>
 
 	<p>
 		Launched in 2021, the Vegetarian Cowgirl is a new up-and-coming lifestyle blog in Austin, TX.
@@ -44,8 +46,14 @@
 </article>
 
 <style lang="scss">
+	.hero {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	img {
-		width: 100%;
+		width: 65%;
 	}
 
 	.center {
@@ -58,11 +66,13 @@
 	p {
 		font-size: larger;
 		font-weight: lighter;
-		width: 85%;
+		line-height: 1.5;
+		width: 65%;
 		color: #000000b3;
 	}
 
 	h2 {
+		font-size: xx-large;
 		font-weight: 500;
 		margin-bottom: 0;
 		font-family: Jost, sans-serif;
@@ -77,9 +87,17 @@
 		}
 	}
 
+	@media (max-width: 1300px) {
+		p,
+		img {
+			width: 85%;
+		}
+	}
+
 	@media (max-width: 1000px) {
-		p {
-			width: 100%;
+		p,
+		img {
+			width: 95%;
 		}
 	}
 </style>
