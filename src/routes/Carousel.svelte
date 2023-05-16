@@ -1,27 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import { quintOut } from 'svelte/easing';
-	import { each, onMount } from 'svelte/internal';
-	import { crossfade } from 'svelte/transition';
-
-	const [send, receive] = crossfade({
-		duration: (d) => Math.sqrt(d * 200),
-
-		fallback(node, params) {
-			const style = getComputedStyle(node);
-			const transform = style.transform === 'none' ? '' : style.transform;
-
-			return {
-				duration: 600,
-				easing: quintOut,
-				css: (t) => `
-					transform: ${transform} scale(${t});
-					opacity: ${t}
-				`
-			};
-		}
-	});
-
 	let slideIndex = 0;
 
 	export let slides: {
@@ -30,46 +7,41 @@
 		imgAlt: string;
 		imgSrc: string;
 		title: string;
-	}[] = [
-		{
-			imgAlt: 'arenal volcano',
-			imgSrc: `${base}/images/blog_posts/arenal_volcano.jpg`,
-			title: 'Element 1',
-			description: 'This is the first element.',
-			href: '#'
-		},
-		{
-			imgAlt: 'two cups of ice cream',
-			imgSrc: `${base}/images/blog_posts/austin_afternoon.jpg`,
-			title: 'Element 2',
-			description: 'This is the second element.',
-			href: '#'
-		},
-		{
-			imgAlt: 'sparklers spelling love',
-			imgSrc: `${base}/images/blog_posts/july_4th.jpg`,
-			title: 'Element 3',
-			description: 'This is the third element.',
-			href: '#'
-		},
-		{
-			imgAlt: 'thanksgiving dinner',
-			imgSrc: `${base}/images/blog_posts/thanksgiving.jpg`,
-			title: 'Element 4',
-			description: 'This is the fourth element.',
-			href: '#'
-		}
-	];
+	}[];
+	export let transition_ms: number;
+
+	const nextSlide = () => {
+		slideIndex = (slideIndex + 1) % slides.length;
+	};
+
+	const prevSlide = () => {
+		slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+	};
+
+	let interval: number;
+
+	const resetInterval = () => {
+		clearInterval(interval);
+		interval = setInterval(nextSlide, transition_ms);
+	};
+
+	const stopInterval = () => {
+		clearInterval(interval);
+	};
+
+	resetInterval();
 </script>
 
 <div class="carousel">
 	<div class="carousel-container">
-		{#each slides as slide, index}
+		{#each slides as slide, index (index)}
 			<article class="carousel-slide" class:carousel-active={index === slideIndex}>
 				<img src={slide.imgSrc} alt={slide.imgAlt} />
-				<div>
-					<h2>{slide.title}</h2>
-					<p>{slide.description}</p>
+				<div class="info">
+					<div class="text">
+						<h2>{@html slide.title}</h2>
+						<p>{@html slide.description}</p>
+					</div>
 					<a href={slide.href}>Read Post</a>
 				</div>
 			</article>
@@ -77,12 +49,17 @@
 
 		<button
 			class="prev carousel-controls"
-			on:click={() => (slideIndex = (slideIndex - 1 + slides.length) % slides.length)}
-			>&#10094;</button
+			on:click={() => {
+				resetInterval();
+				prevSlide();
+			}}>&#10094;</button
 		>
 		<button
 			class="next carousel-controls"
-			on:click={() => (slideIndex = (slideIndex + 1) % slides.length)}>&#10095;</button
+			on:click={() => {
+				resetInterval();
+				nextSlide();
+			}}>&#10095;</button
 		>
 	</div>
 
@@ -91,7 +68,10 @@
 			<button
 				class="dot"
 				class:active={index === slideIndex}
-				on:click={() => (slideIndex = index)}
+				on:click={() => {
+					stopInterval();
+					slideIndex = index;
+				}}
 			/>
 		{/each}
 	</div>
@@ -110,21 +90,36 @@
 
 	/* Slideshow container */
 	.carousel-container {
-		// min-height: 30rem;
-		// aspect-ratio: 3/2;
+		width: 70%;
+		height: 30rem;
 		position: relative;
 		margin: auto;
+		background-color: rgb(244, 242, 237);
+		border-radius: 0.4em;
+		overflow: hidden;
+
+		@media (max-width: 1600px) {
+			height: fit-content;
+		}
 	}
 
 	/* Hide the images by default */
 	.carousel-slide {
-		display: none;
+		display: flex;
+		visibility: hidden;
+		max-height: 0;
+		opacity: 0;
+		position: absolute;
+
+		transition: max-height 0s 0.5s, visibility 0s 0.5s, opacity 0.5s ease-out;
 
 		img {
 			object-fit: cover;
+			height: 30rem;
+			aspect-ratio: 20/9;
 		}
 
-		div {
+		.info {
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
@@ -132,14 +127,23 @@
 			margin: 0 2rem;
 		}
 
+		.text {
+			display: inherit;
+			flex-direction: inherit;
+			align-items: inherit;
+			justify-content: center;
+		}
+
 		h2 {
-			font-size: 2.5rem;
+			font-size: 2.125rem;
+			font-weight: 900;
 			margin-bottom: 0.5rem;
+			font-family: 'Jost', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 		}
 
 		p {
-			font-size: 1.5rem;
-			font-weight: lighter;
+			font-size: 1rem;
+			font-weight: 500;
 			line-height: 1.5;
 			width: 65%;
 			color: #000000b3;
@@ -147,22 +151,84 @@
 
 		a {
 			background-color: #ea9782;
+			border: 1px solid #ea9782;
 			color: white;
 			font-weight: 100;
 			text-transform: uppercase;
-			padding: 0.75rem 1rem;
+			padding: 0.4rem 1rem;
+			line-height: 1.75;
 			text-decoration: none;
+
+			transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		}
+
+		a:hover {
+			background-color: white;
+			color: #ea9782;
+		}
+
+		@media (max-width: 2200px) {
+			img {
+				aspect-ratio: 16/9;
+			}
+		}
+
+		@media (max-width: 1900px) {
+			img {
+				aspect-ratio: 12/9;
+			}
+		}
+
+		@media (max-width: 1600px) {
+			position: static;
+			flex-direction: column;
+
+			h2 {
+				margin-top: 0;
+			}
+
+			.info {
+				align-items: center;
+				margin: 2rem;
+			}
+
+			h2,
+			p {
+				text-align: center;
+			}
+
+			img {
+				aspect-ratio: 16/9;
+			}
+		}
+
+		@media (max-width: 1100px) {
+			img {
+				height: 20rem;
+			}
+		}
+
+		@media (max-width: 750px) {
+			img {
+				height: 10rem;
+			}
+
+			p {
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 3; /* number of lines to show */
+				line-clamp: 3;
+				-webkit-box-orient: vertical;
+			}
 		}
 	}
 
 	/* Show the images on an active carousel-slide */
-	.carousel-slide.carousel-active {
-		display: flex;
-		width: 100%;
-
-		img {
-			width: 60%;
-		}
+	.carousel-active {
+		visibility: visible;
+		max-height: fit-content;
+		opacity: 1;
+		transition: opacity 0.5s ease-in;
 	}
 
 	/* Next & previous buttons */
