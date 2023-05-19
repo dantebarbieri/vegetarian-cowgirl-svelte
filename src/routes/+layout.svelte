@@ -14,6 +14,10 @@
 </div>
 
 <style>
+	:global(body) {
+		min-width: 325px;
+	}
+
 	#app {
 		display: flex;
 		flex-direction: column;
