@@ -90,16 +90,34 @@
 
 	/* Slideshow container */
 	.carousel-container {
-		width: 70%;
 		height: 30rem;
 		position: relative;
 		margin: auto;
 		background-color: rgb(244, 242, 237);
-		border-radius: 0.4em;
 		overflow: hidden;
 
 		@media (max-width: 1600px) {
 			height: fit-content;
+		}
+
+		@media (min-width: 0px) {
+			min-width: 20rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 600px) {
+			min-width: 25rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 900px) {
+			min-width: 37.5rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 1200px) {
+			min-width: 70rem;
+			min-height: 20rem;
 		}
 	}
 
@@ -109,14 +127,13 @@
 		visibility: hidden;
 		max-height: 0;
 		opacity: 0;
-		position: absolute;
 
 		transition: max-height 0s 0.5s, visibility 0s 0.5s, opacity 0.5s ease-out;
 
 		img {
 			object-fit: cover;
 			height: 30rem;
-			aspect-ratio: 20/9;
+			width: 75%;
 		}
 
 		.info {
@@ -167,19 +184,19 @@
 			color: #ea9782;
 		}
 
-		@media (max-width: 2200px) {
-			img {
-				aspect-ratio: 16/9;
-			}
-		}
-
-		@media (max-width: 1900px) {
-			img {
-				aspect-ratio: 12/9;
-			}
-		}
-
 		@media (max-width: 1600px) {
+			img {
+				width: 66.7%;
+			}
+		}
+
+		@media (max-width: 1200px) {
+			img {
+				width: 55%;
+			}
+		}
+
+		@media (max-width: 900px) {
 			position: static;
 			flex-direction: column;
 
@@ -198,17 +215,25 @@
 			}
 
 			img {
-				aspect-ratio: 16/9;
+				width: 100%;
 			}
 		}
 
-		@media (max-width: 1100px) {
+		@media (max-width: 600px) {
 			img {
 				height: 20rem;
 			}
+
+			p {
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 4; /* number of lines to show */
+				line-clamp: 4;
+				-webkit-box-orient: vertical;
+			}
 		}
 
-		@media (max-width: 750px) {
+		@media (max-width: 400px) {
 			img {
 				height: 10rem;
 			}
@@ -216,8 +241,8 @@
 			p {
 				overflow: hidden;
 				display: -webkit-box;
-				-webkit-line-clamp: 3; /* number of lines to show */
-				line-clamp: 3;
+				-webkit-line-clamp: 2; /* number of lines to show */
+				line-clamp: 2;
 				-webkit-box-orient: vertical;
 			}
 		}
@@ -260,13 +285,26 @@
 		background-color: rgba(0, 0, 0, 0.8);
 	}
 
+	.carousel-dots {
+		margin: 0.5rem;
+		display: flex;
+		gap: 0.4em;
+
+		@media (max-width: 900px) {
+			gap: 1.2em;
+
+			.dot {
+				height: 1.5em;
+			}
+		}
+	}
+
 	/* The dots/bullets/indicators */
 	.dot {
 		cursor: pointer;
 		height: 0.667em;
 		aspect-ratio: 1/1;
 		padding: 0;
-		margin: 0 0.2em;
 		background-color: rgba(175, 175, 175, 0.8);
 		border-radius: 50%;
 		border-color: transparent;

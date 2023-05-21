@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import Carousel from './Carousel.svelte';
+	import Header from './Header.svelte';
 
 	const slides = [
 		{
@@ -40,7 +41,132 @@
 	<title>The Vegetarian Cowgirl</title>
 </svelte:head>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-
 <Carousel {slides} transition_ms={7_500} />
+
+<section id="featured-posts">
+	<Header variant="h2" font_size="2.125rem">Featured Posts</Header>
+</section>
+
+<section id="travel-guides">
+	<Header variant="h2" font_size="2.125rem">Travel Guides</Header>
+</section>
+
+<article id="about">
+	<div class="image">
+		<img src="{base}/images/about/BioProfile.jpg" alt="Anjali by the Trevi Fountain" />
+	</div>
+	<div class="text">
+		<h3>Welcome to the Vegetarian Cowgirl</h3>
+		<p>
+			Anjali is the blogger behind A Vegetarian Cowgirl, Austin's top vegetarian food guide. Anjali
+			hopes to inspire you taste buds by guiding you through plant based spots in cities. Check out
+			her recipes, travel guides and her art.
+		</p>
+		<a href="{base}/about">About</a>
+	</div>
+</article>
+
+<style lang="scss">
+	section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	article#about {
+		display: flex;
+		flex-direction: row;
+		border: 1px solid #000e;
+		background-color: rgb(244, 242, 237);
+
+		div {
+			flex: 1 1 50%;
+		}
+
+		.image {
+			overflow: hidden;
+			position: relative;
+		}
+
+		img {
+			position: absolute;
+			top: 67%;
+			left: 50%;
+			transform: translate(-50%, -67%);
+			object-fit: cover;
+			min-width: 100%;
+			min-height: 100%;
+			width: auto;
+			height: auto;
+		}
+
+		.text {
+			font-family: Jost, sans-serif;
+			color: rgba(0, 0, 0, 0.7);
+			padding: 0 2rem;
+
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+		}
+
+		h3 {
+			font-size: 2.125rem;
+			font-weight: 500;
+			margin: 0 0 0.35em;
+		}
+
+		p {
+			font-size: 1.25rem;
+			font-weight: 500;
+			margin: 0 0 0.35em;
+		}
+
+		a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0.5rem 0 0;
+			text-decoration: none;
+			font-family: Karla, sans-serif;
+			font-weight: 500;
+			font-size: 0.875rem;
+			line-height: 1.75;
+			text-transform: uppercase;
+			min-width: 4rem;
+			padding: 0.4rem 1rem;
+			transition: background-color 0.25s ease-in-out, border-color 0.25s ease-in-out,
+				color 0.25s ease-in-out;
+			color: rgba(255, 255, 255, 0.97);
+			border: 1px solid rgb(255, 168, 122);
+			background-color: rgb(240, 155, 133);
+
+			&:hover {
+				background-color: rgb(255, 255, 255);
+				color: rgba(240, 155, 133);
+			}
+		}
+
+		@media (min-width: 0px) {
+			min-width: 20rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 600px) {
+			min-width: 25rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 900px) {
+			min-width: 37.5rem;
+			min-height: 20rem;
+		}
+
+		@media (min-width: 1200px) {
+			min-width: 70rem;
+			min-height: 20rem;
+		}
+	}
+</style>

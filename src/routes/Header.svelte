@@ -53,7 +53,7 @@
 <style>
 	* {
 		font-family: Jost, sans-serif;
-		font-weight: 500;
+		font-weight: 400;
 		position: relative;
 		width: fit-content;
 		padding-bottom: var(--underline-gap);
