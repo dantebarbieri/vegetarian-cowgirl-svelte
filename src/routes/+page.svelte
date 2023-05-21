@@ -81,24 +81,30 @@
 		background-color: rgb(244, 242, 237);
 
 		div {
-			flex: 1;
+			flex: 1 1 50%;
 		}
 
 		.image {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+			overflow: hidden;
+			position: relative;
 		}
 
 		img {
-			margin: 2rem;
-			max-height: 25rem;
+			position: absolute;
+			top: 67%;
+			left: 50%;
+			transform: translate(-50%, -67%);
+			object-fit: cover;
+			min-width: 100%;
+			min-height: 100%;
+			width: auto;
+			height: auto;
 		}
 
 		.text {
 			font-family: Jost, sans-serif;
 			color: rgba(0, 0, 0, 0.7);
-			margin: 0 2rem;
+			padding: 0 2rem;
 
 			display: flex;
 			flex-direction: column;
