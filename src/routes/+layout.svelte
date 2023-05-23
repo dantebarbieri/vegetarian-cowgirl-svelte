@@ -14,6 +14,10 @@
 </div>
 
 <style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
 	:global(body) {
 		min-width: 325px;
 	}

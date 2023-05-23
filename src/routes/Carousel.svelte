@@ -1,13 +1,18 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
+
 	let slideIndex = 0;
 
-	export let slides: {
+	type Slide = {
 		description: string;
 		href: string;
 		imgAlt: string;
 		imgSrc: string;
 		title: string;
-	}[];
+	};
+
+	export let slides: Slide[];
 	export let transition_ms: number;
 
 	const nextSlide = () => {
@@ -18,49 +23,88 @@
 		slideIndex = (slideIndex - 1 + slides.length) % slides.length;
 	};
 
-	let interval: number;
+	let interval: number = 0;
 
 	const resetInterval = () => {
 		clearInterval(interval);
 		interval = setInterval(nextSlide, transition_ms);
 	};
 
-	const stopInterval = () => {
-		clearInterval(interval);
+	const stopInterval = () => clearInterval(interval);
+
+	let current_slide: Slide;
+
+	let reducedMotion: MediaQueryList;
+
+	let imgRef: HTMLImageElement;
+
+	const adjustImageFit = () => {
+		if (!imgRef) return;
+
+		const imgRatio = imgRef.naturalWidth / imgRef.naturalHeight;
+		const containerRatio = imgRef.parentElement?.offsetWidth! / imgRef.parentElement?.offsetHeight!;
+
+		if (imgRatio > containerRatio) {
+			imgRef.style.objectFit = 'contain';
+			imgRef.style.width = 'auto';
+			imgRef.style.height = '100%';
+		} else {
+			imgRef.style.objectFit = 'cover';
+			imgRef.style.width = '100%';
+			imgRef.style.height = 'auto';
+		}
 	};
 
-	resetInterval();
+	onMount(() => {
+		reducedMotion = window.matchMedia('(prefers-reduced-motion)');
+		reducedMotion.addEventListener('change', () => {
+			if (reducedMotion.matches) {
+				stopInterval();
+			} else {
+				resetInterval();
+			}
+		});
+		if (!reducedMotion.matches) {
+			resetInterval();
+		}
+	});
+
+	$: {
+		current_slide = slides[slideIndex];
+		if (!reducedMotion?.matches) {
+			resetInterval();
+		}
+	}
 </script>
 
 <div class="carousel">
-	<div class="carousel-container">
-		{#each slides as slide, index (index)}
-			<article class="carousel-slide" class:carousel-active={index === slideIndex}>
-				<img src={slide.imgSrc} alt={slide.imgAlt} />
-				<div class="info">
-					<div class="text">
-						<h2>{@html slide.title}</h2>
-						<p>{@html slide.description}</p>
+	<div class="carousel-container" on:mouseleave={resetInterval} on:mouseenter={stopInterval}>
+		{#each slides as slide (slide.imgSrc)}
+			{#if slide === current_slide}
+				<article class="carousel-slide" transition:fade={{ duration: 500 }}>
+					<div class="image-container">
+						<img
+							bind:this={imgRef}
+							on:load={adjustImageFit}
+							src={slide.imgSrc}
+							alt={slide.imgAlt}
+						/>
 					</div>
-					<a href={slide.href}>Read Post</a>
-				</div>
-			</article>
+					<div class="text-container">
+						<div class="text">
+							<h2>{@html slide.title}</h2>
+							<p>{@html slide.description}</p>
+						</div>
+						<nav>
+							<a href={slide.href}>Read Post</a>
+						</nav>
+					</div>
+				</article>
+			{/if}
 		{/each}
 
-		<button
-			class="prev carousel-controls"
-			on:click={() => {
-				resetInterval();
-				prevSlide();
-			}}>&#10094;</button
-		>
-		<button
-			class="next carousel-controls"
-			on:click={() => {
-				resetInterval();
-				nextSlide();
-			}}>&#10095;</button
-		>
+		<button class="prev carousel-controls" on:click={prevSlide}>&#10094;</button>
+		<button class="next carousel-controls" on:click={nextSlide}>&#10095;</button>
 	</div>
 
 	<div class="carousel-dots">
@@ -69,8 +113,8 @@
 				class="dot"
 				class:active={index === slideIndex}
 				on:click={() => {
-					stopInterval();
 					slideIndex = index;
+					stopInterval();
 				}}
 			/>
 		{/each}
@@ -78,17 +122,12 @@
 </div>
 
 <style lang="scss">
-	* {
-		box-sizing: border-box;
-	}
-
 	.carousel {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
-	/* Slideshow container */
 	.carousel-container {
 		height: 30rem;
 		position: relative;
@@ -96,164 +135,142 @@
 		background-color: rgb(244, 242, 237);
 		overflow: hidden;
 
-		@media (max-width: 1600px) {
-			height: fit-content;
-		}
-
 		@media (min-width: 0px) {
-			min-width: 20rem;
-			min-height: 20rem;
+			width: 20rem;
+			height: 30rem;
 		}
 
 		@media (min-width: 600px) {
-			min-width: 25rem;
-			min-height: 20rem;
+			width: 25rem;
+			height: 30rem;
 		}
 
 		@media (min-width: 900px) {
-			min-width: 37.5rem;
-			min-height: 20rem;
+			width: 37.5rem;
+			height: 30rem;
 		}
 
 		@media (min-width: 1200px) {
-			min-width: 70rem;
-			min-height: 20rem;
+			width: 70rem;
+			height: 30rem;
 		}
 	}
 
 	/* Hide the images by default */
 	.carousel-slide {
+		height: 100%;
 		display: flex;
-		visibility: hidden;
-		max-height: 0;
-		opacity: 0;
+		flex-direction: row;
+	}
 
-		transition: max-height 0s 0.5s, visibility 0s 0.5s, opacity 0.5s ease-out;
+	.image-container {
+		flex: 1 1 60%;
+		overflow: hidden;
+		position: relative;
+	}
 
-		img {
-			object-fit: cover;
-			height: 30rem;
-			width: 75%;
-		}
+	img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 
-		.info {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			justify-content: space-around;
-			margin: 0 2rem;
-		}
+	.text-container {
+		flex: 1 1 40%;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: space-around;
+		margin: 0 2rem;
+	}
 
-		.text {
-			display: inherit;
-			flex-direction: inherit;
-			align-items: inherit;
-			justify-content: center;
-		}
+	.text {
+		flex: 1 1 60%;
+	}
 
-		h2 {
-			font-size: 2.125rem;
-			font-weight: 900;
-			margin-bottom: 0.5rem;
-			font-family: 'Jost', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-		}
+	h2 {
+		font-size: 2.125rem;
+		font-weight: 900;
+		margin-bottom: 0.5rem;
+		font-family: 'Jost', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+	}
 
-		p {
-			font-size: 1rem;
-			font-weight: 500;
-			line-height: 1.5;
-			width: 65%;
-			color: #000000b3;
-		}
+	p {
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5;
+		width: 65%;
+		color: #000000b3;
+	}
 
-		a {
-			background-color: #ea9782;
-			border: 1px solid #ea9782;
-			color: white;
-			font-weight: 100;
-			text-transform: uppercase;
-			padding: 0.4rem 1rem;
-			line-height: 1.75;
-			text-decoration: none;
+	nav {
+		flex: 1 1 40%;
+	}
 
-			transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-		}
+	a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0.5rem 0 0;
+		text-decoration: none;
+		font-family: Karla, sans-serif;
+		font-weight: 500;
+		font-size: 0.875rem;
+		line-height: 1.75;
+		text-transform: uppercase;
+		min-width: 4rem;
+		padding: 0.4rem 1rem;
+		transition: background-color 0.25s ease-in-out, border-color 0.25s ease-in-out,
+			color 0.25s ease-in-out;
+		color: rgba(255, 255, 255, 0.97);
+		border: 1px solid rgb(255, 168, 122);
+		background-color: rgb(240, 155, 133);
 
-		a:hover {
-			background-color: white;
-			color: #ea9782;
-		}
-
-		@media (max-width: 1600px) {
-			img {
-				width: 66.7%;
-			}
-		}
-
-		@media (max-width: 1200px) {
-			img {
-				width: 55%;
-			}
-		}
-
-		@media (max-width: 900px) {
-			position: static;
-			flex-direction: column;
-
-			h2 {
-				margin-top: 0;
-			}
-
-			.info {
-				align-items: center;
-				margin: 2rem;
-			}
-
-			h2,
-			p {
-				text-align: center;
-			}
-
-			img {
-				width: 100%;
-			}
-		}
-
-		@media (max-width: 600px) {
-			img {
-				height: 20rem;
-			}
-
-			p {
-				overflow: hidden;
-				display: -webkit-box;
-				-webkit-line-clamp: 4; /* number of lines to show */
-				line-clamp: 4;
-				-webkit-box-orient: vertical;
-			}
-		}
-
-		@media (max-width: 400px) {
-			img {
-				height: 10rem;
-			}
-
-			p {
-				overflow: hidden;
-				display: -webkit-box;
-				-webkit-line-clamp: 2; /* number of lines to show */
-				line-clamp: 2;
-				-webkit-box-orient: vertical;
-			}
+		&:hover {
+			background-color: rgb(255, 255, 255);
+			color: rgba(240, 155, 133);
 		}
 	}
 
-	/* Show the images on an active carousel-slide */
-	.carousel-active {
-		visibility: visible;
-		max-height: fit-content;
-		opacity: 1;
-		transition: opacity 0.5s ease-in;
+	@media (max-width: 900px) {
+		.carousel-slide {
+			flex-direction: column;
+		}
+
+		h2 {
+			margin-top: 0;
+		}
+
+		.text-container {
+			align-items: center;
+			margin: 2rem;
+		}
+
+		h2,
+		p {
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 600px) {
+		p {
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 4; /* number of lines to show */
+			line-clamp: 4;
+			-webkit-box-orient: vertical;
+		}
+	}
+
+	@media (max-width: 400px) {
+		p {
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2; /* number of lines to show */
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
 	}
 
 	/* Next & previous buttons */
@@ -262,22 +279,26 @@
 		position: absolute;
 		top: 50%;
 		width: auto;
-		margin-top: -22px;
-		padding: 16px;
+		margin-top: -1.4rem;
+		padding: 1rem;
 		color: white;
 		font-weight: bold;
-		font-size: 18px;
+		font-size: 1.1rem;
 		transition: 0.6s ease;
-		border-radius: 0 3px 3px 0;
 		border-color: transparent;
 		user-select: none;
 		background-color: rgba(0, 0, 0, 0.1);
 	}
 
 	/* Position the "next button" to the right */
+	.prev {
+		left: 0;
+		border-radius: 0 0.2rem 0.2rem 0;
+	}
+
 	.next {
 		right: 0;
-		border-radius: 3px 0 0 3px;
+		border-radius: 0.2rem 0 0 0.2rem;
 	}
 
 	/* On hover, add a black background color with a little bit see-through */
@@ -306,10 +327,10 @@
 		aspect-ratio: 1/1;
 		padding: 0;
 		background-color: rgba(175, 175, 175, 0.8);
-		border-radius: 50%;
 		border-color: transparent;
 		display: inline-block;
-		transition: background-color 0.6s ease;
+		clip-path: circle(50% at 50% 50%);
+		transition: background-color 0.6s ease, clip-path 0.6s ease;
 	}
 
 	.active,
